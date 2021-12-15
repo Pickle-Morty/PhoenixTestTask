@@ -1,0 +1,27 @@
+.timetable {
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.timetable__day {
+  width: calc(100% / 9);
+  padding: 7px 0;
+  font-size: 18px;
+  border-left: 1px solid #000;
+  display: flex;
+  justify-content: center;
+}
+.timetable__day:first-child {
+  border: none;
+}
+
+.timetable__day.flex-end {
+  order: 1;
+}
+
+.timetable__day.active {
+  background: #5C8EEF;
+  color: white;;
+}
