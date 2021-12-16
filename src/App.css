@@ -131,6 +131,7 @@ main {
   position: relative;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 .close__icon::after,

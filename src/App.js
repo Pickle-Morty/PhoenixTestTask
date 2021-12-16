@@ -6,6 +6,7 @@ import Timetable from './component/UI/Timetable';
 import TimeCounter from './component/UI/HoursCounter';
 import DateResult from './component/UI/DateResult';
 import HoursResult from './component/UI/HoursResult';
+import { getShortDate, getTime } from './utils';
 
 const optionsTime = [
   { value: '45', label: 'Академические' },
@@ -54,7 +55,7 @@ function App() {
     let totalhourse
     totalhourse = totalTeachingHours
     let dayWeak = dayWeakStart
-    let dayEnd = dayStart
+    let dayEnd = dayStart - 1
     for (; totalhourse > 0;) {
       for (; dayWeak < timetableData.length; dayWeak++) {
         dayEnd = dayEnd + (1 * 24 * 60 * 60 * 1000)
@@ -82,6 +83,7 @@ function App() {
     return newArray
   }
 
+
   useEffect(() => {
     setCalcData({
       ...calcData,
@@ -97,26 +99,34 @@ function App() {
     calcData.totalTeachingHours,
     calcData.dayTeachingHours,
     calcData.dayStart,
+    calcData.timeStart,
     calcData.timetableData,
     calcData.breakTime,
     calcData.hoursType,
   ])
 
   const sendRequest = () => {
-
-    const body = { ...calcData, timetableData: filterArray(calcData.timetableData) }
-    console.log(body)
+    const body = {
+      ...calcData,
+      dayStart: getShortDate(calcData.dayStart),
+      dayEnd: getShortDate(calcData.dayEnd),
+      timeStart: getTime(calcData.timeStart),
+      timeEnd: getTime(calcData.timeEnd),
+      timetableData: filterArray(calcData.timetableData)
+    }
+    console.log(JSON.stringify(body))
+    alert(JSON.stringify(body))
   }
 
 
   return (
     <main>
-      <div className= {modal ? "modal__pupup active" : "modal__pupup"}>
+      <div className={modal ? "modal__pupup active" : "modal__pupup"}>
         <div className="modal">
           <div className="calc">
             <div className="calc__header row space-between">
               <h3>Редактирование расписания</h3>
-              <div onClick = { ()=> setModal(false)} className="close__icon"></div>
+              <div onClick={() => setModal(false)} className="close__icon"></div>
             </div>
             <div className="calc__box">
               <input value={calcData.schoolName} onChange={e => setCalcData({ ...calcData, schoolName: e.target.value })} placeholder="Онлайн школа" type="text" className="calc__input" />
@@ -140,7 +150,10 @@ function App() {
                   ...calcData,
                   dayTeachingHours: data,
                 })} title="Часов &nbsp;в день " />
-              <HoursResult timeStart={calcData.timeStart} timeEnd={calcData.timeEnd} />
+              <HoursResult
+                setTimeStart={(time) => setCalcData({ ...calcData, timeStart: time })}
+                timeStart={calcData.timeStart}
+                timeEnd={calcData.timeEnd} />
             </div>
             <div className="row flex-end">
               <button className="btn__cancel">Отмена</button>
@@ -150,7 +163,7 @@ function App() {
 
         </div>
       </div>
-      <button onClick = {()=> setModal(true)} className="btn__submit">Рассписание</button>
+      <button onClick={() => setModal(true)} className="btn__submit">Расписание</button>
     </main>
   );
 }
