@@ -1,25 +1,7 @@
 import { useEffect, useState } from "react"
 import "./styles.css"
 
-const Timetable = ({ onChange, className, data, setData }) => {
-    const [timetableData, setTimetableData] = useState([
-        { value: false, label: "ВС" },
-        { value: false, label: "ПН" },
-        { value: true, label: "ВТ" },
-        { value: false, label: "СР" },
-        { value: false, label: "ЧТ" },
-        { value: true, label: "ПТ" },
-        { value: false, label: "СБ" },
-    ])
-    useEffect(() => {
-        onChange(timetableData)
-    }, [timetableData]
-    )
-    const validate = {
-        noStudyDay(dayArray) {
-
-        }
-    }
+const Timetable = ({ setData, className, data,}) => {
     const changeSomeDay = (oldData, trueValue) => {
         let newData = [...oldData]
         for (let i = 0; i < newData.length; i++) {
@@ -49,16 +31,16 @@ const Timetable = ({ onChange, className, data, setData }) => {
 
     return (
         <div className={"timetable row " + className}>
-            <div onClick={() => setTimetableData(
-                changeSomeDay(timetableData, [0, 2, 4])
+            <div onClick={() => setData(
+                changeSomeDay(data, [1, 3, 5])
             )} className={"timetable__day"}>ПН/СР/ПТ</div>
-            <div onClick={() => setTimetableData(
-                changeSomeDay(timetableData, [1, 3])
+            <div onClick={() => setData(
+                changeSomeDay(data, [2, 4])
             )}
                 className={"timetable__day"}>ВТ/ЧТ</div>
-            {timetableData.map((item, id) => <div
+            {data.map((item, id) => <div
                 className={getClassName(item.value, id)}
-                onClick={() => setTimetableData(changeDay(timetableData, id))} > {item.label} </div>)}
+                onClick={() => setData(changeDay(data, id))} > {item.label} </div>)}
         </div>
     )
 }

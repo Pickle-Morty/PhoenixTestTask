@@ -26,6 +26,7 @@ const optionsBreak = [
 
 function App() {
   let date = new Date()
+  const [modal, setModal] = useState(true)
   const [calcData, setCalcData] = useState({
     dayStart: date,
     dayEnd: date,
@@ -44,6 +45,8 @@ function App() {
     ],
     hoursType: { value: '45', label: 'Академические' },
     breakTime: { value: '0', label: '0 мин' },
+    color: "#000000",
+    schoolName: ""
   })
 
 
@@ -71,6 +74,14 @@ function App() {
     return new Date(timeEnd)
   }
 
+  const filterArray = (array) => {
+    let newArray = []
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].value) newArray.push(array[i].label)
+    }
+    return newArray
+  }
+
   useEffect(() => {
     setCalcData({
       ...calcData,
@@ -92,46 +103,55 @@ function App() {
   ])
 
   const sendRequest = () => {
-    console.log(calcData)
+
+    const body = { ...calcData, timetableData: filterArray(calcData.timetableData) }
+    console.log(body)
   }
 
 
   return (
-    <div className="modal__pupup">
-      <div className="modal">
-        <div className="calc">
-          <div className="row space-between">
-            <h3 className="calc__title">Редактирование расписания</h3>
-            <div className="close__icon"></div>
-          </div>
-          <div className="calc__box">
-            <input placeholder="Онлайн школа" type="text" className="calc__input" />
-            <div className="calc__color row space-between">
-              <span>Цвет группы:</span> <input type="color" name="" id="" />
+    <main>
+      <div className= {modal ? "modal__pupup active" : "modal__pupup"}>
+        <div className="modal">
+          <div className="calc">
+            <div className="calc__header row space-between">
+              <h3>Редактирование расписания</h3>
+              <div onClick = { ()=> setModal(false)} className="close__icon"></div>
             </div>
-            <Select options={optionsTime} value={calcData.hoursType} onChange={(e) => setCalcData({ ...calcData, hoursType: e })} />
-            <TimeCounter data={calcData.totalTeachingHours}
-              setData={date => setCalcData({ ...calcData, totalTeachingHours: date })}
-              title="Всего часов" />
-            <DateResult dayStart={calcData.dayStart}
-              dayEnd={calcData.dayEnd}
-              setDayStart={date => setCalcData({ ...calcData, dayStart: date })} />
-            <Timetable className="calc__timetable"
-              setData={setCalcData}
-              data={calcData.timetableData}
-              onChange={(timetableData) => setCalcData({ ...calcData, timetableData: timetableData })} />
-            <Select placeholder="Без перерыва" options={optionsBreak} value={calcData.breakTime} onChange={(e) => setCalcData({ ...calcData, breakTime: e })} />
-            <TimeCounter data={calcData.dayTeachingHours} setData={data => setCalcData({ ...calcData, dayTeachingHours: data })} title="Часов &nbsp;в день " />
-            <HoursResult timeStart={calcData.timeStart} timeEnd={calcData.timeEnd} />
+            <div className="calc__box">
+              <input value={calcData.schoolName} onChange={e => setCalcData({ ...calcData, schoolName: e.target.value })} placeholder="Онлайн школа" type="text" className="calc__input" />
+              <div className="calc__color row space-between">
+                <span>Цвет группы:</span> <input type="color" value={calcData.color} onChange={e => setCalcData({ ...calcData, color: e.target.value })} name="" id="" />
+              </div>
+              <Select className="calc__select" options={optionsTime} value={calcData.hoursType} onChange={(e) => setCalcData({ ...calcData, hoursType: e })} />
+              <TimeCounter value={calcData.totalTeachingHours}
+                setValue={date => setCalcData({ ...calcData, totalTeachingHours: date })}
+                title="Всего часов" />
+              <DateResult dayStart={calcData.dayStart}
+                dayEnd={calcData.dayEnd}
+                setDayStart={date => setCalcData({ ...calcData, dayStart: date })} />
+              <Timetable className="calc__timetable"
+                data={calcData.timetableData}
+                setData={(timetableData) => setCalcData({ ...calcData, timetableData: timetableData })} />
+              <Select className="calc__select" placeholder="Без перерыва" options={optionsBreak} value={calcData.breakTime} onChange={(e) => setCalcData({ ...calcData, breakTime: e })} />
+              <TimeCounter value={calcData.dayTeachingHours}
+                maxValue={12}
+                setValue={data => setCalcData({
+                  ...calcData,
+                  dayTeachingHours: data,
+                })} title="Часов &nbsp;в день " />
+              <HoursResult timeStart={calcData.timeStart} timeEnd={calcData.timeEnd} />
+            </div>
+            <div className="row flex-end">
+              <button className="btn__cancel">Отмена</button>
+              <button onClick={() => sendRequest()} className="btn__submit">Добавить рассписание</button>
+            </div>
           </div>
-          <div className="row flex-end">
-            <button className="btn__cancel">Отмена</button>
-            <button onClick={() => sendRequest()} className="btn__submit">Добавить рассписание</button>
-          </div>
-        </div>
 
+        </div>
       </div>
-    </div>
+      <button onClick = {()=> setModal(true)} className="btn__submit">Рассписание</button>
+    </main>
   );
 }
 

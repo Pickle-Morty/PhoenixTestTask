@@ -1,17 +1,20 @@
 .timetable {
   border: 1px solid black;
   border-radius: 5px;
-  height: 40px;
+  height: fit-content;
   box-sizing: border-box;
 }
 
 .timetable__day {
   width: calc(100% / 9);
+  height: 42px;
   padding: 7px 0;
   font-size: 18px;
   border-left: 1px solid #000;
   display: flex;
   justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 .timetable__day:first-child {
   border: none;

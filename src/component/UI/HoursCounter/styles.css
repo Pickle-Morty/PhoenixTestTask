@@ -1,9 +1,9 @@
 .hoursCounter {
     display: flex;
-    border: 1px solid gray;
     height: fit-content;
+    border: 1px solid gray;
     border-radius: 5px;
-    height: 40px;
+    height: 42px;
 }
 
 .hoursCounter__text {
@@ -15,7 +15,7 @@
     color: grey;
     border-left: 1px solid gray;
     width: 50px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1em;
 }
 
@@ -28,9 +28,12 @@
 }
 
 .hoursCounter__btn {
-    padding: 10px 15px;
+    padding: 0 15px;
     background: #5C8EEF;
+    display: flex;
+    align-items: center;
     border: none;
     color: white;
     margin: 0;
+    cursor: pointer;
 }

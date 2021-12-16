@@ -1,6 +1,6 @@
 import "./styles.css"
 
-const HoursResult = ({ className, timeStart, timeEnd, setDayStart, }) => {
+const HoursResult = ({ timeStart, timeEnd, }) => {
     return (
         <div className="hoursResult">
             <span className = "hoursResult__value" >{timeStart.getHours() < 10 ? "0" + timeStart.getHours() : timeStart.getHours()}: {timeStart.getMinutes() < 10 ? "0" + timeStart.getMinutes() : timeStart.getMinutes()}</span>
